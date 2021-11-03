@@ -12,8 +12,8 @@ public class LoginOutTest extends BaseTest {
         LoginPage loginPage = new  LoginPage();
         SoftAssert softAssert = new SoftAssert();
         WorklistsPage worklistsPage = loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
-        worklistsPage.logout();
         softAssert.assertTrue(loginPage.afterLoginPageisOpen());
+        worklistsPage.logout();
         softAssert.assertAll();
     }
 }

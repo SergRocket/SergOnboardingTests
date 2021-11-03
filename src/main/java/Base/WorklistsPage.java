@@ -7,6 +7,7 @@ public class WorklistsPage extends BasePage {
     public By brandImage = new By.ById("headerLogo");
     public By accountMenu = new By.ById("topLoginLink");
     public By favorites = new By.ByCssSelector("#observed-counter>a[href*='favorites']");
+    public By afterSearchResults = new By.ByClassName("offer-wrapper");
     public By mainSearch = new By.ById("headerSearch");
     public By submitSearch = new By.ById("submit-searchmain");
     public By paginationLeftClick = new By.ByCssSelector("a[href*='page=2']");
@@ -41,6 +42,18 @@ public class WorklistsPage extends BasePage {
         String text = getElementText(currentPaginationPage);
         Integer paginationValue = Integer.parseInt(text);
         return paginationValue;
+    }
+
+    public void sendSearchQuery(String lookingFor){
+        findWebElement(mainSearch).sendKeys();
+        findWebElement(submitSearch).click();
+    }
+
+    public boolean isResultsAreVisible(){
+        if(findElements(afterSearchResults).size() >0) {
+            return true;
+        } else
+        return false;
     }
 
 }

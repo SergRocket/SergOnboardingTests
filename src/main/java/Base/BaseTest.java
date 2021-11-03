@@ -53,6 +53,19 @@ public class BaseTest {
         }
     }
 
+    @DataProvider(name = "Test_data")
+    public static Object[][] test_searchQueries(Method method){
+        switch (method.getName()){
+            case "searchForValidDifferent":
+                return new Object[][]{{1, "ZAZ"}};
+            case "searchForInValidDifferent":
+                return new Object[][]{{1, "-="}};
+        }
+        return null;
+    }
+
+
+
     @BeforeClass
     public synchronized void beforeClass(ITestContext context){
         suiteName = context.getCurrentXmlTest().getSuite().getName();
