@@ -70,7 +70,7 @@ public class APIClient {
      * is basically the same as java.util.Map.
      */
     public Object sendGet(String uri)
-            throws MalformedURLException, IOException, APIException
+            throws MalformedURLException, IOException, APIExeption
     {
         return this.sendRequest("GET", uri, null);
     }
@@ -94,13 +94,13 @@ public class APIClient {
      * is basically the same as java.util.Map.
      */
     public Object sendPost(String uri, Object data)
-            throws MalformedURLException, IOException, APIException
+            throws MalformedURLException, IOException, APIExeption
     {
         return this.sendRequest("POST", uri, data);
     }
 
     private Object sendRequest(String method, String uri, Object data)
-            throws MalformedURLException, IOException, APIException
+            throws MalformedURLException, IOException, APIExeption
     {
         URL url = new URL(this.m_url + uri);
 
@@ -140,7 +140,7 @@ public class APIClient {
             istream = conn.getErrorStream();
             if (istream == null)
             {
-                throw new APIException(
+                throw new APIExeption(
                         "TestRail API return HTTP " + status +
                                 " (No additional error message received)"
                 );
@@ -197,7 +197,7 @@ public class APIClient {
                 }
             }
 
-            throw new APIException(
+            throw new APIExeption(
                     "TestRail API returned HTTP " + status +
                             "(" + error + ")"
             );

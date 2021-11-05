@@ -35,6 +35,11 @@ public BasePage() {
 
     public List<WebElement> findElements(By element){return driver.findElements(element);}
 
+    public void clickElement(By element){
+        findWebElement(element).click();
+    }
+
+
     public void clickElementInList(By elements, int elementIndex){
     Reporter.log("Clicking element by index "+ elementIndex + " from list of elements");
     driver.findElements(elements).get(elementIndex -1).click();

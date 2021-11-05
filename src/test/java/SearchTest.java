@@ -12,15 +12,21 @@ public class SearchTest extends BaseTest {
         LoginPage loginPage = new LoginPage();
         SoftAssert softAssert = new SoftAssert();
         WorklistsPage worklistsPage = loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
-        softAssert.assertTrue(worklistsPage.isUrlandCompanyLogoVisible());
+        softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
         worklistsPage.sendSearchQuery(lookingFor);
         softAssert.assertTrue(worklistsPage.isResultsAreVisible());
         softAssert.assertAll();
     }
 
-    @Test()
-    public void searchForOInValidDifferent(){
-
+    @Test(dataProvider ="Test_data")
+    public void searchForOInValidDifferent(String lookingFor){
+        LoginPage loginPage = new LoginPage();
+        SoftAssert softAssert = new SoftAssert();
+        WorklistsPage worklistsPage = loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
+        softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
+        worklistsPage.sendSearchQuery(lookingFor);
+        softAssert.assertFalse(worklistsPage.isResultsAreVisible());
+        softAssert.assertTrue(worklistsPage.isCarMakesAreVisible());
+        softAssert.assertAll();
     }
-
 }

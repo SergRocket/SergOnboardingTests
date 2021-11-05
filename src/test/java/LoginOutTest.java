@@ -14,6 +14,7 @@ public class LoginOutTest extends BaseTest {
         WorklistsPage worklistsPage = loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
         softAssert.assertTrue(loginPage.afterLoginPageisOpen());
         worklistsPage.logout();
+        softAssert.assertTrue(worklistsPage.isCarMakesAreVisible());
         softAssert.assertAll();
     }
 }

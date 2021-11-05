@@ -4,15 +4,16 @@ import Utils.AppConfig;
 import org.openqa.selenium.By;
 
 public class LoginPage extends BasePage {
-    public By credentialsInput = new By.ById("loginForm");
-    public By emailInput = new By.ById("userEmail");
-    public By passwordInput = new By.ById("userPass");
-    public By loginButton = new By.ById("se_userLogin");
+    public By credentialsInput = new By.ById("block-notlogged");
+    public By emailInput = new By.ById("auth-username");
+    public By passwordInput = new By.ById("auth-password");
+    public By loginButton = new By.ByCssSelector("button[class*='btn-success authTop']");
     public By error = new By.ById("se_emailError");
+    public By credentialsInputAfterLog = new By.ById("block-loggedin");
 
     public  boolean  afterLoginPageisOpen(){
-        waitForElementToBeVisible(credentialsInput);
-        return isDysplayed(credentialsInput);
+        waitForElementToBeVisible(credentialsInputAfterLog);
+        return isDysplayed(credentialsInputAfterLog);
     }
 
     public WorklistsPage login(String password, String username){

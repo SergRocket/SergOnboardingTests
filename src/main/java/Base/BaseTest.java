@@ -3,11 +3,15 @@ package Base;
 import TestData.CurrentDateTime;
 import TestData.TestRailApiSetup;
 import Utils.APIExeption;
+import Utils.AppConfig;
 import Utils.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.opera.OperaDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
@@ -34,9 +38,9 @@ public class BaseTest {
         return DRIVER_THREAD_LOCAL.get();
     }
 
-    @Parameters({"testRailSuiteId", "environment"})
+    @Parameters({"testRailCoreId","testRailSuiteId"})
     @BeforeClass
-    public void createTestRailRun(@Optional("0") String testRailCoreId, @Optional("0") String testRailSuiteId, String environment, ITestContext context) throws IOException, APIExeption {
+    public void createTestRailRun(@Optional("0") String testRailCoreId, @Optional("0") String testRailSuiteId, ITestContext context) throws IOException, APIExeption {
         if(!testRailSuiteId.equals("0")){
             Map data = new HashMap();
             data.put("suiteId", testRailSuiteId);
@@ -44,7 +48,7 @@ public class BaseTest {
                     context.getCurrentXmlTest().getSuite().getName()+" (Automated) ");
             data.put("includeAll", true);
             JSONArray testRailRunsArr = (JSONArray)TestRailApiSetup.getInstance().sendGet("get_runs/1");
-            testRailRunId = getNeededTestRunId(testRailRunsArr, environment);
+            testRailRunId = getNeededTestRunId(testRailRunsArr);
             if(testRailRunId.equals("")){
                 JSONObject testRun = (JSONObject)TestRailApiSetup.getInstance()
                         .sendPost("add_run/" + testRailCoreId, data);
@@ -59,7 +63,7 @@ public class BaseTest {
             case "searchForValidDifferent":
                 return new Object[][]{{1, "ZAZ"}};
             case "searchForInValidDifferent":
-                return new Object[][]{{1, "-="}};
+                return new Object[][]{{1, "/*/*/*/***//"}};
         }
         return null;
     }
@@ -70,7 +74,7 @@ public class BaseTest {
     public synchronized void beforeClass(ITestContext context){
         suiteName = context.getCurrentXmlTest().getSuite().getName();
         ExtentTest extentTest = ExtentReportManager.getiInstanceOfExtentReports(suiteName)
-        .createTest(getClass().getName());
+         .createTest(getClass().getName());
         parentTest.set(extentTest);
     }
 
@@ -80,14 +84,15 @@ public class BaseTest {
         ExtentTest extentTest = parentTest.get().createNode(method.getName());
         test.set(extentTest);
         testName = method.getName();
+        driver.get(AppConfig.startUrl);
         Reporter.log("Method - " + testName + " - has started");
     }
 
-    @Parameters({"browser", "env"})
+    @Parameters({"browser"})
     @BeforeTest
-    public void setBrowserAndEnv(String browser, String env){
+    public void setBrowserAndEnv(@Optional("chrome") String browser){
         browserName = browser;
-        setENV(env);
+        driver = createDriver(browser);
     }
 
     @AfterMethod
@@ -126,24 +131,40 @@ public class BaseTest {
 
     public static String getENV(){return ENV;}
 
-    private String getNeededTestRunId(JSONArray allRuns, String env){
+    private String getNeededTestRunId(JSONArray allRuns){
         String isCompleted;
         for(int i = allRuns.size()-1; i>=0; i--){
             JSONObject run = (JSONObject) allRuns.get(i);
             isCompleted = String.valueOf(run.get("is_completed"));
-            if (String.valueOf(run.get("name")).contains(CurrentDateTime.getCurrentDate()) &&
-                    String.valueOf(run.get("name")).contains(env) && isCompleted.equals("false")) {
+            if (String.valueOf(run.get("name")).contains(CurrentDateTime.getCurrentDate())&& isCompleted.equals("false")) {
                 return String.valueOf(run.get("id"));
             }
         }
         return "";
         }
 
-    @Parameters({"testRailCaseId", "testRailCaseId2", "testRailCaseId3", "testRailCaseId3", "testRailCaseId4", "testRailCaseId5"})
+        public WebDriver createDriver(String browserName){
+            switch (browserName){
+                case "chrome":
+                    WebDriverManager.chromedriver().setup();
+                    DRIVER_THREAD_LOCAL.set(new ChromeDriver());
+                    break;
+                case "opera":
+                    WebDriverManager.operadriver().setup();
+                    DRIVER_THREAD_LOCAL.set(new OperaDriver());
+                    break;
+                default:
+                    System.out.print("Failed to setup browser");
+            }
+            return DRIVER_THREAD_LOCAL.get();
+        }
+
+
+    @Parameters({"testRailCaseId", "testRailCaseId2", "testRailCaseId3", "testRailCaseId4", "testRailCaseId5"})
     @AfterMethod
     public void addResultForTestRail(@Optional("0") String testRailCaseId,@Optional("0") String testRailCaseId2,
-                                     @Optional("0") String testRailCaseId3,@Optional("0") String testRailCaseId4,
-                                     @Optional("0") String testRailCaseId5, ITestResult result){
+                                     @Optional("0") String testRailCaseId3,@Optional("0") String testRailCaseId4, @Optional("0") String testRailCaseId5,
+                                     ITestResult result){
         putResultsIntoTestRail(testRailCaseId, result);
         putResultsIntoTestRail(testRailCaseId2, result);
         putResultsIntoTestRail(testRailCaseId3, result);
@@ -167,7 +188,7 @@ public class BaseTest {
             try {
                 TestRailApiSetup.getInstance().sendPost("add_result_for_case/" + testRailRunId + "/"
                 + testCaseId, data);
-                } catch (IOException e){
+                } catch (IOException | APIExeption e){
                 e.printStackTrace();
             }
         }

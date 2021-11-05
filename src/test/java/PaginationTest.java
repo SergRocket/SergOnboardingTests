@@ -12,6 +12,7 @@ public class PaginationTest extends BaseTest {
         SoftAssert softAssert= new SoftAssert();
         loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
         WorklistsPage worklistsPage = new  WorklistsPage();
+        worklistsPage.sendSearchQuery(AppConfig.searchQuery);
         worklistsPage.paginationClick();
         softAssert.assertTrue(worklistsPage.isPaginationDysplayed());
         softAssert.assertEquals(worklistsPage.isPaginationCounterUpdated(),2);
