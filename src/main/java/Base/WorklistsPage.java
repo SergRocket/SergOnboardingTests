@@ -15,7 +15,7 @@ public class WorklistsPage extends BasePage {
     public By paginationRightClick = new By.ByXPath("//a[text()='« Назад']");
     public By currentPaginationPage = new By.ByCssSelector("li[class*='number active']>a");
     public By logoutButton = new By.ByXPath("//a[text()='Выход']");
-    public By navMenuBlocks = new By.ByCssSelector("div.top-menu > ul > li > div > div > a");
+    public By navMenuBlocks = new By.ByCssSelector("div[class*='top-menu']>ul>li");
     public By carNames = new By.ByCssSelector("div[class*='model-name']");
     public By catParts = new By.ByCssSelector("div[class*='row parts_cats']");
     public By noResultsError = new By.ByCssSelector("div[class*='alert-warning']>h4");

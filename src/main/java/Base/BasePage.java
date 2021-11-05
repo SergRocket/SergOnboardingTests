@@ -110,10 +110,33 @@ public BasePage() {
       return stringList;
     }
 
-    public void scrollWithJSToElement(By element){
+    public boolean isDysplayed(By element){
+        if (findElements(element).size() >0) {
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean containsUrl (String str){
+        boolean currentUrl = driver.getCurrentUrl().contains(str);
+        return currentUrl;
+    }
+
+    public void scrollWithJSToElement(WebElement element){
     Reporter.log("Scrolling to element with JS");
     JavascriptExecutor executor = (JavascriptExecutor)driver;
     executor.executeScript("arguments[0].scrollIntoView(true);", element);
     }
+
+    public void waitForElementToBeVisible(By element){
+      webDriverWait.until(ExpectedConditions.visibilityOf(findWebElement(element)));
+    }
+
+    public void clickelementWithJS(By element){
+    Reporter.log("Clicking an element with JS executor");
+    JavascriptExecutor executor =(JavascriptExecutor)driver;
+    executor.executeScript("arguments[0].click();", element);
+    }
+
 
 }
