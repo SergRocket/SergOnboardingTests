@@ -11,4 +11,5 @@ public class AppConfig {
     public static final String searchQueryInvalid = "ZAZ";
     public static final String searchQuery = "Втулка";
     public static final String secondSearchQuery = "Maybach";
+    public static final String errorText = "К сожалению, по запросу \"ZAZ\" ничего не найдено.";
 }

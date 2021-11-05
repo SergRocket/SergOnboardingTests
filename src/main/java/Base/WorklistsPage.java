@@ -2,12 +2,13 @@ package Base;
 
 import Utils.AppConfig;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.util.Random;
 
 public class WorklistsPage extends BasePage {
     public By brandImage = new By.ByCssSelector("img[src*='media/logo']");
-    public By afterSearchResults = new By.ByClassName("div[class*='part_box_wrapper']");
+    public By afterSearchResults = new By.ByCssSelector("img[src*='/templates/ukrparts/assets/media/n']");
     public By mainSearch = new By.ById("artnum");
     public By submitSearch = new By.ByCssSelector("button[onclick*='search_bubmit']");
     public By paginationLeftClick = new By.ByCssSelector("a[href*='page=2']");
@@ -17,6 +18,9 @@ public class WorklistsPage extends BasePage {
     public By navMenuBlocks = new By.ByCssSelector("div.top-menu > ul > li > div > div > a");
     public By carNames = new By.ByCssSelector("div[class*='model-name']");
     public By catParts = new By.ByCssSelector("div[class*='row parts_cats']");
+    public By noResultsError = new By.ByCssSelector("div[class*='alert-warning']>h4");
+    public By paginationBlock = new By.ByCssSelector("ul[class*='pagination']");
+    public By accountBlock = new By.ById("block-loggedin");
 
     public boolean isCompanyLogoVisible() {
         if (findElements(brandImage).size() >0) {
@@ -56,6 +60,7 @@ public class WorklistsPage extends BasePage {
     public void sendSearchQuery(String lookingFor){
         findWebElement(mainSearch).sendKeys(lookingFor);
         findWebElement(submitSearch).click();
+
     }
 
     public boolean isResultsAreVisible(){
@@ -72,6 +77,19 @@ public class WorklistsPage extends BasePage {
             return false;
     }
 
+    public String getErrorText(){
+        String errorText = findWebElement(noResultsError).getText();
+        return errorText;
+    }
+
+    public boolean isErrorAreVisible(){
+        String errorText = findWebElement(noResultsError).getText();
+        if(findElements(noResultsError).size()>0){
+            return true;
+        } else
+            return false;
+    }
+
     public void selectingCategory(){
         int favQnt = findElements(navMenuBlocks).size() -1;
         int firstFavImg = 1;
@@ -80,6 +98,11 @@ public class WorklistsPage extends BasePage {
         int i = rn.nextInt()%n;
         int random = firstFavImg+i;
         findElements(navMenuBlocks).get(random).click();
+    }
+
+    public void scrollToPagination(){
+        WebElement pagination = findWebElement(paginationBlock);
+        scrollWithJSToElement(pagination);
     }
 
 }
