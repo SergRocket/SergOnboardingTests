@@ -13,8 +13,9 @@ public class SearchTest extends BaseTest {
     @TestRailConfigAnnotation(id="21")
     @Test(dataProvider ="Test_data",testName = "User can perform valid search query")
     public void searchForValidDifferent(String lookingFor) throws InterruptedException {
-        WorklistsPage worklistsPage = new WorklistsPage();
+        LoginPage loginPage = new LoginPage();
         SoftAssert softAssert = new SoftAssert();
+        WorklistsPage worklistsPage = loginPage.login(AppConfig.validPassword, AppConfig.validUsername);
         softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
         Thread.sleep(1500);
         worklistsPage.sendSearchQuery(lookingFor);

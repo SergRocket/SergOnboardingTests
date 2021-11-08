@@ -44,9 +44,9 @@ public class BaseTest {
     public static WebDriver getWebDriver(){
         return DRIVER_THREAD_LOCAL.get();
     }
-
+    @Parameters({"browser"})
     @BeforeSuite
-    public void createTestRun(ITestContext context) throws IOException, APIExeption{
+    public void createTestRun(ITestContext context, @Optional("chrome") String browser) throws IOException, APIExeption{
         client = new APIClient(RAILS_ENGINE_URL);
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
@@ -57,6 +57,7 @@ public class BaseTest {
         jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
         Long suite_Id = (Long) jsonObject.get("id");
         context.setAttribute("suiteId", suite_Id);
+
     }
 
     /*@Parameters({"testRailCoreId","testRailSuiteId"})
@@ -90,15 +91,17 @@ public class BaseTest {
     @Parameters({"browser"})
     @BeforeTest
     public void setBrowserAndEnv(@Optional("chrome") String browser){
-        browserName = browser;
-        driver = createDriver(browser);
+        /*browserName = browser;
+        driver = createDriver(browser);*/
     }
-
+    @Parameters({"browser"})
     @BeforeMethod
-    public void beforeMethodSetup(Method method,ITestContext context){
+    public void beforeMethodSetup(Method method,ITestContext context,@Optional("chrome") String browser){
         ExtentTest extentTest = parentTest.get().createNode(method.getName());
         test.set(extentTest);
         testName = method.getName();
+        browserName = browser;
+        driver = createDriver(browser);
         driver.get(AppConfig.startUrl);
         Reporter.log("Method - " + testName + " - has started");
         if(method.isAnnotationPresent(TestRailConfigAnnotation.class)){
@@ -143,7 +146,7 @@ public class BaseTest {
         Reporter.log("Test has stopped");
     }
 
-    @AfterTest
+    @AfterMethod
     public void killDriver(){
         if(driver !=null){
             driver.close();

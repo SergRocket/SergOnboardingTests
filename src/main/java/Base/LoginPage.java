@@ -1,6 +1,5 @@
 package Base;
 
-import Utils.AppConfig;
 import org.openqa.selenium.By;
 
 public class LoginPage extends BasePage {

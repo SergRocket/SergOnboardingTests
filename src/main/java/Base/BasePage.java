@@ -1,10 +1,8 @@
 package Base;
 
-import Utils.AppConfig;
 import Utils.Reporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,7 +22,7 @@ private static final int retryAttempts = 10;
 private static final long IMPLICID_WAIT = 20;
 
 public BasePage() {
-    driver = BaseTest.getWebDriver();
+    this.driver = BaseTest.getWebDriver();
     webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
     webDriverFastWait = new WebDriverWait(driver, Duration.ofSeconds(1));
     fluentWait = new FluentWait<>(driver).withTimeout(Duration.ofSeconds(5)).pollingEvery(Duration.ofMillis(500))
