@@ -1,6 +1,6 @@
 import Base.BaseTest;
-import Base.LoginPage;
-import Base.WorklistsPage;
+import PageObjects.LoginPage;
+import PageObjects.WorklistsPage;
 import TestData.TestRailConfigAnnotation;
 import Utils.AppConfig;
 import org.testng.annotations.Test;

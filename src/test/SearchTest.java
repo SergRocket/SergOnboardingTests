@@ -1,12 +1,10 @@
 import Base.BaseTest;
-import Base.LoginPage;
-import Base.WorklistsPage;
+import PageObjects.LoginPage;
+import PageObjects.WorklistsPage;
 import TestData.TestRailConfigAnnotation;
 import Utils.AppConfig;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
-import javax.swing.plaf.SliderUI;
 
 
 public class SearchTest extends BaseTest {

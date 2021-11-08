@@ -1,5 +1,6 @@
-package Base;
+package PageObjects;
 
+import Base.BasePage;
 import org.openqa.selenium.By;
 
 public class LoginPage extends BasePage {
