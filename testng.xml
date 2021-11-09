@@ -4,7 +4,7 @@
         <listener class-name="Base.BaseListener"></listener>
     </listeners>
     <test verbose="2" preserve-order="true" name="SergOnboardingTests">
-        <parameter name="browser" value="chrome"></parameter>
+        <parameter name="" value=""></parameter>
         <classes>
             <class name="LoginTest">
                 <methods>

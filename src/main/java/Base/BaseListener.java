@@ -20,19 +20,22 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import static Base.BaseTest.getWebDriver;
 
 public class BaseListener implements IInvokedMethodListener, ITestListener {
-
     @Override
     public void onTestFailure(ITestResult result) {
+        BaseTest baseTest = new BaseTest();
         Reporter.logFail("Test has failed");
         String methodName = result.getMethod().getMethodName();
         String testName = result.getMethod().getXmlTest().getName();
-        takeScreenShot(methodName, testName, result);
+        baseTest.takeScreenshots("ScreenshotOnFailure", methodName, testName);
+        //takeScreenShot(methodName, testName, result);
+        //takeScreenshots(methodName, testName, result);
         Reporter.logFail(getJSConsoleError());
     }
 
@@ -67,13 +70,12 @@ public class BaseListener implements IInvokedMethodListener, ITestListener {
         String fileName = methodName + timeIndentif + ".png";
         String fileLocation = System.getProperty("user.dir") + File.separator + "target" + File.separator + "result"
                 + File.separator + testName + File.separator + currentDate + File.separator;
-
         try {
             WebDriver augmentDriver = new Augmenter().augment(getWebDriver());
             File screenShot = ((TakesScreenshot) augmentDriver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(screenShot, new File(fileLocation + fileName));
         } catch (IOException e) {
-            System.out.println(e.toString());
+            System.out.println(e);
             e.printStackTrace();
         }
         Reporter.logFail("Test has failed and got en exeption: " + testResult.getThrowable());
@@ -89,4 +91,22 @@ public class BaseListener implements IInvokedMethodListener, ITestListener {
             e.printStackTrace();
         }
     }
+
+    protected void takeScreenshots(String methodName, String testName, ITestResult testResult) {
+        WebDriver augmentDriver = new Augmenter().augment(getWebDriver());
+        File srcFile = ((TakesScreenshot) augmentDriver).getScreenshotAs(OutputType.FILE);
+        DateFormat dateFormat = new SimpleDateFormat("d:MM:yyyy");
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Kiev"));
+        String currentDate = dateFormat.format(calendar.getTime());
+        String timeIndentif = new SimpleDateFormat("d:MM:yyyy").format(calendar.getTime());
+        String fileName = methodName + timeIndentif + ".png";
+        String fileLocation = System.getProperty("user.dir") + File.separator + "target" + File.separator + "result"
+                + File.separator + testName + File.separator + currentDate + File.separator;
+        try {
+            FileUtils.copyFile(srcFile, new File(fileLocation + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

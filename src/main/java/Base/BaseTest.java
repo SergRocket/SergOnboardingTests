@@ -9,19 +9,29 @@ import Utils.AppConfig;
 import Utils.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Listeners({BaseListener.class})
@@ -40,6 +50,8 @@ public class BaseTest {
     public static String TESTRAIL_USERNAME = "serg.lishko1988@gmail.com";
     public static String TESTRAIL_PASSWORD = "fg78N7RS";
     public static String RAILS_ENGINE_URL = "https://sergqaajun.testrail.io/";
+    protected String testSuiteName;
+        protected String testMethodName;
 
     public static WebDriver getWebDriver(){
         return DRIVER_THREAD_LOCAL.get();
@@ -108,6 +120,8 @@ public class BaseTest {
             TestRailConfigAnnotation configAnnotation = method.getAnnotation(TestRailConfigAnnotation.class);
             context.setAttribute("caseId", configAnnotation.id());
         }
+        this.testSuiteName = context.getSuite().getName();
+        this.testMethodName = method.getName();
     }
 
     @AfterMethod
@@ -243,6 +257,28 @@ public class BaseTest {
         }
     }
 
-
+    protected void takeScreenshots(String fileName, String methodName, String testName) {
+        WebDriver augmentDriver = new Augmenter().augment(getWebDriver());
+        File srcFile = ((TakesScreenshot) augmentDriver).getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + File.separator + "test-outpit" + File.separator + "screenshots" +
+                File.separator + getTodayDate() + File.separator + testSuiteName + File.separator + testName + File.separator
+                + methodName + File.separator + getSystemTime() + " " + fileName + " .png";
+        try {
+            FileUtils.copyFile(srcFile, new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static String getTodayDate(){
+        return (new SimpleDateFormat("yyyyMMdd").format(new Date()));
+    }
+    public String getSystemTime(){
+        return (new SimpleDateFormat("HHmmssSSS").format(new Date()));
+    }
+    protected List<LogEntry> getBrowserLogs(){
+        LogEntries logEntries = driver.manage().logs().get("browser");
+        List<LogEntry> logEntries1 = logEntries.getAll();
+        return logEntries1;
+    }
 
 }

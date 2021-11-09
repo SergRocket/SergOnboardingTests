@@ -1,4 +1,4 @@
-package PageObjects;
+package Base;
 
 import Base.BasePage;
 import org.openqa.selenium.By;

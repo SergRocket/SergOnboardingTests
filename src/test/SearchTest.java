@@ -1,6 +1,6 @@
 import Base.BaseTest;
-import PageObjects.LoginPage;
-import PageObjects.WorklistsPage;
+import Base.LoginPage;
+import Base.WorklistsPage;
 import TestData.TestRailConfigAnnotation;
 import Utils.AppConfig;
 import org.testng.annotations.Test;
@@ -32,7 +32,7 @@ public class SearchTest extends BaseTest {
         worklistsPage.sendSearchQuery(lookingFor);
         softAssert.assertTrue(worklistsPage.isErrorAreVisible());
         softAssert.assertEquals(worklistsPage.getErrorText(), "К сожалению, по запросу \"ZAZ\" ничего не найдено.\n" +
-                "Свяжитесь, пожалуйста, с нашими специалистами по указанным выше телефонам.");
+                "Свяжитесь, пожалуйста, с нашими специалистами по  выше телефонам.");
         softAssert.assertAll();
     }
 }
