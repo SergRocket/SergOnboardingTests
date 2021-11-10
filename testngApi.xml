@@ -1,0 +1,36 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Smoke suite">
+    <test verbose="2" preserve-order="true" name="SergOnboardingTests">
+        <classes>
+            <class name="ApiTests">
+                <methods>
+                    <include name="getUsers">
+
+                    </include>
+                    <include name="getOneUsersName">
+
+                    </include>
+                    <include name="printUserName">
+
+                    </include>
+                    <include name="checkUserNameWithLamda">
+
+                    </include>
+                    <include name="getTheListOfEmails">
+
+                    </include>
+                    <include name="deserializationOfTheListtoOBJ">
+
+                    </include>
+                    <include name="deserializationOfTheListtoOBJFULL">
+
+                    </include>
+
+                    <include name="createUser">
+
+                    </include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

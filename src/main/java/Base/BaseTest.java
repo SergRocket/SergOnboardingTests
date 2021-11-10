@@ -12,9 +12,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -51,14 +49,13 @@ public class BaseTest {
     public static String TESTRAIL_PASSWORD = "fg78N7RS";
     public static String RAILS_ENGINE_URL = "https://sergqaajun.testrail.io/";
     protected String testSuiteName;
-        protected String testMethodName;
 
     public static WebDriver getWebDriver(){
         return DRIVER_THREAD_LOCAL.get();
     }
-    @Parameters({"browser"})
+
     @BeforeSuite
-    public void createTestRun(ITestContext context, @Optional("chrome") String browser) throws IOException, APIExeption{
+    public void createTestRun(ITestContext context) throws IOException, APIExeption{
         client = new APIClient(RAILS_ENGINE_URL);
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
@@ -69,7 +66,6 @@ public class BaseTest {
         jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
         Long suite_Id = (Long) jsonObject.get("id");
         context.setAttribute("suiteId", suite_Id);
-
     }
 
     /*@Parameters({"testRailCoreId","testRailSuiteId"})
@@ -103,25 +99,22 @@ public class BaseTest {
     @Parameters({"browser"})
     @BeforeTest
     public void setBrowserAndEnv(@Optional("chrome") String browser){
-        /*browserName = browser;
-        driver = createDriver(browser);*/
+        browserName = browser;
+        driver = createDriver(browser);
+        driver.get(AppConfig.startUrl);
     }
+
     @Parameters({"browser"})
     @BeforeMethod
     public void beforeMethodSetup(Method method,ITestContext context,@Optional("chrome") String browser){
         ExtentTest extentTest = parentTest.get().createNode(method.getName());
         test.set(extentTest);
         testName = method.getName();
-        browserName = browser;
-        driver = createDriver(browser);
-        driver.get(AppConfig.startUrl);
         Reporter.log("Method - " + testName + " - has started");
         if(method.isAnnotationPresent(TestRailConfigAnnotation.class)){
             TestRailConfigAnnotation configAnnotation = method.getAnnotation(TestRailConfigAnnotation.class);
             context.setAttribute("caseId", configAnnotation.id());
         }
-        this.testSuiteName = context.getSuite().getName();
-        this.testMethodName = method.getName();
     }
 
     @AfterMethod
@@ -155,12 +148,11 @@ public class BaseTest {
         } else if (results.getStatus() == ITestResult.SKIP)
             test.get().skip(results.getThrowable());
         else
-            test.get().pass("Test has passed");
-        //ExtentReportManager.getiInstanceOfExtentReports(suiteName).flush();
+        test.get().pass("Test has passed");
         Reporter.log("Test has stopped");
     }
 
-    @AfterMethod
+    @AfterTest
     public void killDriver(){
         if(driver !=null){
             driver.close();
@@ -169,16 +161,6 @@ public class BaseTest {
         }
     }
 
-    @DataProvider(name = "Test_data")
-    public static Object[][] test_searchQueries(Method method){
-        switch (method.getName()){
-            case "searchForOInValidDifferent":
-                return new Object[][]{{"ZAZ"}};
-            case "searchForValidDifferent":
-                return new Object[][]{{"090"}};
-        }
-        return null;
-    }
 
     private static void setENV(String envnForTests){
         ENV = envnForTests;
@@ -193,6 +175,34 @@ public class BaseTest {
     }
 
     public static String getENV(){return ENV;}
+
+    public void validLog(){
+        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.validUsername);
+        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.validPassword);
+        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
+    }
+
+    public void invalidLog(){
+        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.invalidUsername);
+        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.invalidPassword);
+        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
+    }
+
+    public void sendSearchQuery(){
+        driver.findElement(By.id("artnum")).sendKeys(AppConfig.searchQuery);
+        driver.findElement(By.cssSelector("button[onclick*='search_bubmit']")).click();
+    }
+
+    public void cleanSearchField(){
+        String searchField = driver.findElement(By.id("artnum")).getText();
+        if(searchField !=null){
+            driver.findElement(By.id("artnum")).clear();
+        }
+    }
+
+    public void logOut(){
+        driver.findElement(By.xpath("//a[text()='Выход']")).click();
+    }
 
     private String getNeededTestRunId(JSONArray allRuns){
         String isCompleted;
@@ -222,18 +232,6 @@ public class BaseTest {
             return DRIVER_THREAD_LOCAL.get();
         }
 
-
-    /*@Parameters({"testRailCaseId", "testRailCaseId2", "testRailCaseId3", "testRailCaseId4", "testRailCaseId5"})
-    @AfterMethod
-    public void addResultForTestRail(@Optional("0") String testRailCaseId,@Optional("0") String testRailCaseId2,
-                                     @Optional("0") String testRailCaseId3,@Optional("0") String testRailCaseId4, @Optional("0") String testRailCaseId5,
-                                     ITestResult result){
-        putResultsIntoTestRail(testRailCaseId, result);
-        putResultsIntoTestRail(testRailCaseId2, result);
-        putResultsIntoTestRail(testRailCaseId3, result);
-        putResultsIntoTestRail(testRailCaseId4, result);
-        putResultsIntoTestRail(testRailCaseId5, result);
-    }*/
 
     public void putResultsIntoTestRail(String testCaseId, ITestResult result){
         if(!testCaseId.equals("0")){
@@ -280,5 +278,4 @@ public class BaseTest {
         List<LogEntry> logEntries1 = logEntries.getAll();
         return logEntries1;
     }
-
 }

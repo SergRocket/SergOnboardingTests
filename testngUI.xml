@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Smoke suite">
+    <test verbose="2" preserve-order="true" name="SergOnboardingTests">
+        <parameter name="browser" value="chrome"></parameter>
+        <parameter name="testRailSuiteId" value="1"/>
+        <classes>
+            <class name="MainPageTests">
+                <methods>
+                    <include name="validLogin">
+                        <parameter name="testRailCaseId" value="3"/>
+                    </include>
+                    <include name="paginationTest">
+                        <parameter name="testRailCaseId" value="4"/>
+                    </include>
+                    <include name="searchForValidDifferent">
+                        <parameter name="testRailCaseId" value="21"/>
+                    </include>
+                    <include name="searchForOInValidDifferent">
+                        <parameter name="testRailCaseId" value="5"/>
+                    </include>
+                    <include name="selectingRandomCategory">
+                        <parameter name="testRailCaseId" value="6"/>
+                    </include>
+                    <include name="loginOut">
+                        <parameter name="testRailCaseId" value="2"/>
+                    </include>
+                    <include name="negativeLogInTest">
+                        <parameter name="testRailCaseId" value="1"/>
+                    </include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

@@ -23,14 +23,16 @@ public class WorklistsPage extends BasePage {
     public By accountBlock = new By.ById("block-loggedin");
 
     public boolean isCompanyLogoVisible() {
-        if (findElements(brandImage).size() >0) {
+        if (isDysplayed(brandImage)) {
             return true;
         } else
             return false;
     }
 
+
+
     public boolean isCarMakesAreVisible() {
-        if (findElements(carNames).size() >0) {
+        if (isDysplayed(carNames)) {
             return true;
         } else
             return false;
@@ -45,7 +47,7 @@ public class WorklistsPage extends BasePage {
     }
 
     public boolean isPaginationDysplayed(){
-        if (findElements(currentPaginationPage).size() >0) {
+        if (isDysplayed(currentPaginationPage)) {
             return true;
         } else
             return false;
@@ -71,7 +73,7 @@ public class WorklistsPage extends BasePage {
     }
 
     public boolean isCategoriesAreVisible(){
-        if(findElements(catParts).size() >0) {
+        if(isDysplayed(catParts)) {
             return true;
         } else
             return false;
@@ -84,7 +86,7 @@ public class WorklistsPage extends BasePage {
 
     public boolean isErrorAreVisible(){
         String errorText = findWebElement(noResultsError).getText();
-        if(findElements(noResultsError).size()>0){
+        if(isDysplayed(noResultsError)){
             return true;
         } else
             return false;
@@ -103,6 +105,11 @@ public class WorklistsPage extends BasePage {
     public void scrollToPagination(){
         WebElement pagination = findWebElement(paginationBlock);
         scrollWithJSToElement(pagination);
+    }
+
+    public void scrollToSearch(){
+        WebElement search = findWebElement(mainSearch);
+        scrollWithJSToElement(search);
     }
 
 }

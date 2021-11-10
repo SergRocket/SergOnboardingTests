@@ -93,8 +93,6 @@ public class ApiTests {
 
     @Test
     public void createUser(){
-
-
         ParamForUserCreation createUsersTest = UserGenerator.getSimpleUser();
         UserResponse createUserResponseTest = api.createUser(createUsersTest);
         AssertionsForClassTypes.assertThat(createUserResponseTest)
