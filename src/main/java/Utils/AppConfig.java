@@ -12,4 +12,5 @@ public class AppConfig {
     public static final String searchQuery = "Втулка";
     public static final String secondSearchQuery = "Maybach";
     public static final String errorText = "К сожалению, по запросу \"ZAZ\" ничего не найдено.";
+    public static final String HOST = "http://localhost:4444/wd/hub";
 }

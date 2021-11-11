@@ -14,10 +14,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
@@ -26,6 +28,8 @@ import org.testng.annotations.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -98,8 +102,10 @@ public class BaseTest {
 
     @Parameters({"browser"})
     @BeforeTest
-    public void setBrowserAndEnv(@Optional("chrome") String browser){
+    public void setBrowserAndEnv(@Optional("chrome") String browser) throws MalformedURLException {
         browserName = browser;
+        ChromeOptions options = new ChromeOptions();
+        driver = new RemoteWebDriver(new URL(AppConfig.HOST), options);
         driver = createDriver(browser);
         driver.get(AppConfig.startUrl);
     }
