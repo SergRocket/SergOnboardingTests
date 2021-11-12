@@ -1,9 +1,9 @@
 package DBAccess;
 
 public class SetOfKeys {
-    TESTING_ENV("http://172.16.10.62:8085", 5433, "172.16.242.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    /*TESTING_ENV("http://172.16.10.62:8085", 5433, "172.16.242.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
     AWS_QA("https://axis-qa01.readytech.com", 5432,"axis-qa-master.ch2n3vepnvhb.eu-central-1.rds.amazonaws.com", "axis",
-                   "ReadyTechAxis", "axisqa01", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd");
+                   "ReadyTechAxis", "axisqa01", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd");*/
 
     private String url;
     private int port;
@@ -17,7 +17,7 @@ public class SetOfKeys {
     private String sshUserPassword;
 
     private SetOfKeys(String url, int port, String dBIp, String dBUserName, String dBUserPassword, String dBName, String sshAddress, int sshPort,
-                      String sshUserName, String sshUserPassword){
+                      String sshUserName, String sshUserPassword) {
         this.url = url;
         this.port = port;
         this.dBIp = dBIp;
@@ -30,52 +30,55 @@ public class SetOfKeys {
         this.sshUserPassword = sshUserPassword;
     }
 
-    public String  getterUrl(){
+    public String getterUrl() {
         return url;
     }
 
-    public int getPort(){
+    public int getPort() {
         return port;
     }
 
-    public String getdBIp(){
+    public String getdBIp() {
         return dBIp;
     }
 
-    public String getdBUserName(){
+    public String getdBUserName() {
         return dBUserName;
     }
 
-    public String getdBUserPassword(){
+    public String getdBUserPassword() {
         return dBUserPassword;
     }
 
-    public String getDbName(){
+    public String getDbName() {
         return dBName;
     }
 
-    public String getSshAddress(){
+    public String getSshAddress() {
         return sshAddress;
     }
 
-    public int getSshPort(){
+    public int getSshPort() {
         return sshPort;
     }
 
-    public String getSshUserName(){
+    public String getSshUserName() {
         return sshUserName;
     }
 
-    public String getSshUserPassword(){
+    public String getSshUserPassword() {
         return sshUserPassword;
     }
 
-    public static SetOfKeys findKeysByUrl(String url){
-        for (SetOfKeys keys : values()){
+    public static SetOfKeys findKeysByUrl(String url) {
+       /* for (SetOfKeys keys :
+                values())
+        {
             if(keys.getterUrl().equals(url)){
                 return keys;
             }
-        }
+        }*/
         return null;
     }
+
 }

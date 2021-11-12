@@ -104,8 +104,8 @@ public class BaseTest {
     @BeforeTest
     public void setBrowserAndEnv(@Optional("chrome") String browser) throws MalformedURLException {
         browserName = browser;
-        ChromeOptions options = new ChromeOptions();
-        driver = new RemoteWebDriver(new URL(AppConfig.HOST), options);
+        //ChromeOptions options = new ChromeOptions();
+        //driver = new RemoteWebDriver(new URL(AppConfig.HOST), options);
         driver = createDriver(browser);
         driver.get(AppConfig.startUrl);
     }
@@ -155,7 +155,8 @@ public class BaseTest {
             test.get().skip(results.getThrowable());
         else
         test.get().pass("Test has passed");
-        Reporter.log("Test has stopped");
+        ExtentReportManager.getiInstanceOfExtentReports(suiteName).flush();
+        Reporter.log("Start stopping tests");
     }
 
     @AfterTest

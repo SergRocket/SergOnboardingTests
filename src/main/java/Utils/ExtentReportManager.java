@@ -23,6 +23,7 @@ public class ExtentReportManager {
         ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter
         (suiteName+ "-" +simpleDateFormat.format(currentDate)+ ".html");
         htmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
+        htmlReporter.config().setReportName("Report for onboarding tests");
         htmlReporter.config().setChartVisibilityOnOpen(true);
         htmlReporter.config().setTheme(Theme.DARK);
         htmlReporter.config().setDocumentTitle("Smoke Tests");
@@ -32,4 +33,6 @@ public class ExtentReportManager {
         extentReports.attachReporter(htmlReporter);
         return extentReports;
     }
+
+
 }

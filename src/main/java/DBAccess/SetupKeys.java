@@ -4,7 +4,7 @@ import static javax.management.Query.value;
 
 public class SetupKeys {
 
-    TESTING_ENV("http://172.16.30.101:9009", "5433", "labtracker_web");
+    //TESTING_ENV("http://172.16.30.101:9009", "5433", "labtracker_web");
     private String url;
     private String port;
     private String dbName;
@@ -28,11 +28,11 @@ public class SetupKeys {
     }
 
     public static SetupKeys findDBNameWithUrl(String url){
-        for(SetupKeys keys : values()){
+        /*for(SetupKeys keys : values()){
           if(keys.getterUrl().equals(url)){
               return keys;
           }
-        }
+        }*/
         return null;
     }
 }
