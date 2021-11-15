@@ -38,7 +38,6 @@ import java.util.Map;
 
 @Listeners({BaseListener.class})
 public class BaseTest {
-    private static final String PROJECT_ID = "1";
     private static final ThreadLocal<WebDriver> DRIVER_THREAD_LOCAL = new ThreadLocal<>();
     private static ThreadLocal<ExtentTest> parentTest = new ThreadLocal();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal();
@@ -50,16 +49,16 @@ public class BaseTest {
     protected APIClient client;
     protected HashMap data;
     public static String TESTRAIL_USERNAME = "serg.lishko1988@gmail.com";
-    public static String TESTRAIL_PASSWORD = "fg78N7RS";
-    public static String RAILS_ENGINE_URL = "https://sergqaajun.testrail.io/";
+    public static String TESTRAIL_PASSWORD = "a0.4zajeI2r8vcjTX3Of";
+    public static String RAILS_ENGINE_URL = "https://sergtesterqa.testrail.io/";
     protected String testSuiteName;
 
     public static WebDriver getWebDriver(){
         return DRIVER_THREAD_LOCAL.get();
     }
-
+    @Parameters({"PROJECT"})
     @BeforeSuite
-    public void createTestRun(ITestContext context) throws IOException, APIExeption{
+    public void createTestRun(ITestContext context,@Optional("1")String PROJECT_ID) throws IOException, APIExeption{
         client = new APIClient(RAILS_ENGINE_URL);
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
@@ -72,24 +71,6 @@ public class BaseTest {
         context.setAttribute("suiteId", suite_Id);
     }
 
-    /*@Parameters({"testRailCoreId","testRailSuiteId"})
-    @BeforeClass
-    public void createTestRailRun(@Optional("0") String testRailCoreId, @Optional("0") String testRailSuiteId, ITestContext context) throws IOException, APIExeption {
-        if(!testRailSuiteId.equals("0")){
-            Map data = new HashMap();
-            data.put("suiteId", testRailSuiteId);
-            data.put("name", CurrentDateTime.getCurrentDate() + " " +
-                    context.getCurrentXmlTest().getSuite().getName()+" (Automated) ");
-            data.put("includeAll", true);
-            JSONArray testRailRunsArr = (JSONArray)TestRailApiSetup.getInstance().sendGet("get_runs/1");
-            testRailRunId = getNeededTestRunId(testRailRunsArr);
-            if(testRailRunId.equals("")){
-                JSONObject testRun = (JSONObject)TestRailApiSetup.getInstance()
-                        .sendPost("add_run/" + testRailCoreId, data);
-            testRailRunId = String.valueOf(testRun.get("id"));
-            }
-        }
-    }*/
 
 
     @BeforeClass
@@ -102,17 +83,17 @@ public class BaseTest {
 
     @Parameters({"browser"})
     @BeforeTest
-    public void setBrowserAndEnv(@Optional("chrome") String browser) throws MalformedURLException {
+    public void setBrowserAndEnv(@Optional("chrome")String browser) throws MalformedURLException {
         browserName = browser;
         //ChromeOptions options = new ChromeOptions();
         //driver = new RemoteWebDriver(new URL(AppConfig.HOST), options);
         driver = createDriver(browser);
         driver.get(AppConfig.startUrl);
-    }
+        }
 
     @Parameters({"browser"})
     @BeforeMethod
-    public void beforeMethodSetup(Method method,ITestContext context,@Optional("chrome") String browser){
+    public void beforeMethodSetup(Method method,ITestContext context,@Optional("chrome")String browser){
         ExtentTest extentTest = parentTest.get().createNode(method.getName());
         test.set(extentTest);
         testName = method.getName();

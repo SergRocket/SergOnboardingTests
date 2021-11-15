@@ -1,8 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Smoke suite">
+    <parameter name="browser" value="chrome"/>
+    <parameter name="testRailSuiteId" value="1"/>
+    <parameter name="PROJECT" value="1"/>
     <test verbose="2" preserve-order="true" name="SergOnboardingTests">
-        <parameter name="browser" value="chrome"></parameter>
-        <parameter name="testRailSuiteId" value="1"/>
+
         <classes>
             <class name="MainPageTests">
                 <methods>

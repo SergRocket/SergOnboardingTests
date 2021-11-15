@@ -1,4 +1,6 @@
+import Base.BaseTest;
 import RestApiSetup.*;
+import TestData.TestRailConfigAnnotation;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
@@ -12,7 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class ApiTests {
+public class ApiTests extends BaseTest {
     private static Autorization api;
 
     @BeforeClass
@@ -27,14 +29,16 @@ public class ApiTests {
             .setContentType(ContentType.JSON)
             .build();
 
-    @Test
+    @TestRailConfigAnnotation(id="29")
+    @Test(testName = "getUsers")
     public void getUsers(){
         given()
                 .spec(REQUEST_SPECIFICATION)
                 .when().get()
                 .then().statusCode(200);
     }
-    @Test
+    @TestRailConfigAnnotation(id="30")
+    @Test(testName = "getOneUsersName")
     public void getOneUsersName(){
         given()
                 .spec(REQUEST_SPECIFICATION)
@@ -45,7 +49,8 @@ public class ApiTests {
 
     }
 
-    @Test
+    @TestRailConfigAnnotation(id="31")
+    @Test(testName = "printUserName")
     public void printUserName(){
         String user = given().spec(REQUEST_SPECIFICATION)
                 .when().get()
@@ -55,15 +60,17 @@ public class ApiTests {
         System.out.println(user);
     }
 
-    @Test
-    public void checkUserNameWithLamda (){
+    @TestRailConfigAnnotation(id="32")
+    @Test(testName = "checkUserNameWithLamda")
+    public void checkUserNameWithLamda(){
         given().spec(REQUEST_SPECIFICATION)
                 .when().get()
                 .then()
                 .statusCode(200)
                 .body("data.find{it.email=='george.bluth@reqres.in'}.first_name", equalTo("George"));
     }
-    @Test
+    @TestRailConfigAnnotation(id="33")
+    @Test(testName = "getTheListOfEmails")
     public void getTheListOfEmails(){
         List<String> emails = given()
                 .spec(REQUEST_SPECIFICATION)
@@ -76,7 +83,8 @@ public class ApiTests {
         System.out.println(emails.get(4));
     }
 
-    @Test
+    @TestRailConfigAnnotation(id="34")
+    @Test(testName = "deserializationOfTheListtoOBJ")
     public void deserializationOfTheListtoOBJ(){
         List<Deserialization> users = given()
                 .spec(REQUEST_SPECIFICATION)
@@ -86,12 +94,15 @@ public class ApiTests {
                 .extract().jsonPath().getList("data", Deserialization.class);
         assertThat(users).extracting(Deserialization::getEmail).contains("george.bluth@reqres.in");
     }
-    @Test
+
+    @TestRailConfigAnnotation(id="35")
+    @Test(testName = "deserializationOfTheListtoOBJFULL")
     public void deserializationOfTheListtoOBJFULL() {
         assertThat(api.getUsers()).extracting(Deserialization::getEmail).contains("george.bluth@reqres.in");
     }
 
-    @Test
+    @TestRailConfigAnnotation(id="36")
+    @Test(testName = "createUser")
     public void createUser(){
         ParamForUserCreation createUsersTest = UserGenerator.getSimpleUser();
         UserResponse createUserResponseTest = api.createUser(createUsersTest);

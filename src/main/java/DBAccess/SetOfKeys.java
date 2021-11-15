@@ -1,36 +1,47 @@
 package DBAccess;
 
-public class SetOfKeys {
-    /*TESTING_ENV("http://172.16.10.62:8085", 5433, "172.16.242.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+public enum SetOfKeys {
+    TEST_ENV("http://172.16.10.62:8085", 5433, "172.16.242.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    MASTER_ENV("http://172.16.10.62:8081", 5432, "172.16.239.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    DEV_ENV("http://172.16.10.62:8082", 5432, "172.16.238.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    FEATURE_PRAGMASOFT_ENV("http://172.16.10.62:8083", 5432, "172.16.240.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    FEATURE_INFOSTROY_ENV("http://172.16.10.62:8084", 5432, "172.16.241.2", "axis", "axis", "axis", "172.16.10.62", 22, "vkholintest", "ReadyTech2016"),
+    AWS_ACCEPTANCE("https://axis-acceptance01.readytech.com", 5432,"axis-acceptance-master.ch2n3vepnvhb.eu-central-1.rds.amazonaws.com", "reCDoLoRyL",
+            "dHkh3p5ECf7ES66Yscyt", "axis", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd"),
     AWS_QA("https://axis-qa01.readytech.com", 5432,"axis-qa-master.ch2n3vepnvhb.eu-central-1.rds.amazonaws.com", "axis",
-                   "ReadyTechAxis", "axisqa01", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd");*/
+            "ReadyTechAxis", "axisqa01", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd"),
+    AWS_QA2("https://axis-qa02.readytech.com", 5432,"axis-qa-master.ch2n3vepnvhb.eu-central-1.rds.amazonaws.com", "axis",
+            "ReadyTechAxis", "axisqa02", "18.184.30.64", 22, "qa", "w9BySKVvP!87bWd"),
+    AWS_DEV5("https://axis-dev05.readytech.com", 5432,"axis-dev.ch2n3vepnvhb.eu-central-1.rds.amazonaws.com", "axis",
+            "ReadyTechAxis", "axisdev05", "172.95.11.194", 22, "qa", "w9BySKVvP!87bWd");
 
     private String url;
     private int port;
-    private String dBIp;
-    private String dBUserName;
-    private String dBUserPassword;
-    private String dBName;
+    private String dbIP;
+    private String dbUserName;
+    private String dbUserPassword;
+    private String dbName;
     private String sshAddress;
     private int sshPort;
     private String sshUserName;
-    private String sshUserPassword;
+    private String sshUserPass;
 
-    private SetOfKeys(String url, int port, String dBIp, String dBUserName, String dBUserPassword, String dBName, String sshAddress, int sshPort,
-                      String sshUserName, String sshUserPassword) {
+    private SetOfKeys(String url, int port, String dbIP, String dbUserName, String dbUserPassword, String dbName, String sshAddress, int sshPort,
+                     String sshUserName, String sshUserPass) {
+
         this.url = url;
         this.port = port;
-        this.dBIp = dBIp;
-        this.dBUserName = dBUserName;
-        this.dBUserPassword = dBUserPassword;
-        this.dBName = dBName;
+        this.dbIP = dbIP;
+        this.dbUserName = dbUserName;
+        this.dbUserPassword = dbUserPassword;
+        this.dbName = dbName;
         this.sshAddress = sshAddress;
         this.sshPort = sshPort;
         this.sshUserName = sshUserName;
-        this.sshUserPassword = sshUserPassword;
+        this.sshUserPass = sshUserPass;
     }
 
-    public String getterUrl() {
+    public String getUrl() {
         return url;
     }
 
@@ -38,20 +49,20 @@ public class SetOfKeys {
         return port;
     }
 
-    public String getdBIp() {
-        return dBIp;
+    public String getDbIP() {
+        return dbIP;
     }
 
-    public String getdBUserName() {
-        return dBUserName;
+    public String getDbUserName() {
+        return dbUserName;
     }
 
-    public String getdBUserPassword() {
-        return dBUserPassword;
+    public String getdDbUserPassword() {
+        return dbUserPassword;
     }
 
     public String getDbName() {
-        return dBName;
+        return dbName;
     }
 
     public String getSshAddress() {
@@ -67,17 +78,15 @@ public class SetOfKeys {
     }
 
     public String getSshUserPassword() {
-        return sshUserPassword;
+        return sshUserPass;
     }
 
     public static SetOfKeys findKeysByUrl(String url) {
-       /* for (SetOfKeys keys :
-                values())
-        {
-            if(keys.getterUrl().equals(url)){
-                return keys;
+        for(SetOfKeys v : values()){
+            if (v.getUrl().equals(url)) {
+                return v;
             }
-        }*/
+        }
         return null;
     }
 

@@ -4,14 +4,14 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.qameta.allure.util.PropertiesUtils;
-import oracle.ucp.proxy.annotation.Pre;
+//import com.netsuite.jbcx.openaccess.OpenAccessDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static oracle.security.pki.resources.OraclePKICmd.c;
+import static Base.BaseTest.*;
 
 public class DataBaseManager {
 
@@ -20,6 +20,9 @@ public class DataBaseManager {
 
     public DataBaseManager() throws SQLException {
     }
+
+
+
 
     private static void makeSshTunnel(String stringSshuser, String stringSshPassword, String stringSshHost,
                                       int sshPort, String stringRemoteHost, int localPort, int remotePort) throws JSchException {
@@ -42,12 +45,12 @@ public class DataBaseManager {
                 String stringSshPassword = keysSet.getSshUserPassword();
                 String stringSshHost = keysSet.getSshAddress();
                 int sshPort = keysSet.getSshPort();
-                String stringRemoteHost = keysSet.getdBIp();
+                String stringRemoteHost = keysSet.getDbIP();
                 int localPort = 3366;
                 int remotePort = keysSet.getPort();
-                String stringDbUser = keysSet.getdBUserName();
+                String stringDbUser = keysSet.getDbUserName();
                 String stringDbName = keysSet.getDbName();
-                String stringDbPassword = keysSet.getdBUserPassword();
+                String stringDbPassword = keysSet.getdDbUserPassword();
 
                 System.out.println("SSH loging username: " + stringSshuser);
                 System.out.println("SSH login password: " + stringSshPassword);
@@ -80,11 +83,55 @@ public class DataBaseManager {
 
     public Connection getConnectionString(SetOfKeys keys) throws SQLException {
         Connection connect = null;
-        connect = DriverManager.getConnection("jdbc:postgresql://" + keys.getterUrl()
-                .replace("http://", "").substring(0, keys.getterUrl()
+        connect = DriverManager.getConnection("jdbc:postgresql://" + keys.getUrl()
+                .replace("http://", "").substring(0, keys.getUrl()
                         .replace("http://", "").length() - 5) + ":" + keys
                 .getPort() + "/axis", "axis", "axis");
         return connect;
+    }
+
+    public String getAccountRoleById(String roleId) {
+        try {
+            SetOfKeys k = SetOfKeys.findKeysByUrl(getAccountRoleById("34"));
+            if (k != null) {
+                connection = getConnectionString(k);
+                Statement st = connection.createStatement();
+                String sqlQueryForRole = "Select * from ACCOUNT_ROLE "
+                        + "Where ACCOUNT_ROLE.Account_Role_id = " + roleId + ";";
+                ResultSet rs = st.executeQuery(sqlQueryForRole);
+                if (rs.next()) {
+                    String accountRole = rs.getString("ACCOUNT_ROLE_NAME");
+                    return accountRole;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public boolean checkIfUserExists(String email, String firstName){
+        try{
+            //Class.forName("org.postgresql.Driver");
+            String url = SetOfKeys.TEST_ENV.getUrl();
+            SetOfKeys key = SetOfKeys.findKeysByUrl(url);
+            if(key != null){
+                Connection connection = getConnectionString(key);
+                Statement statement = connection.createStatement();
+                String sqlQueryForPrograms = "Select Count(*) as Total From users "
+                        + "Where users.email = '"
+                        + email + "' AND users.first_name='" + firstName + "';";
+                ResultSet resSet = statement.executeQuery(sqlQueryForPrograms);
+                if(resSet.next()){
+                    int counter = resSet.getInt("total");
+                    if(counter > 0){return true;}
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return false;
     }
 
     public int getCountOfEventsPerUser(String firstName, String lastName, String email) {

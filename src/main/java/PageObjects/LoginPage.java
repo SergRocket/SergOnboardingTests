@@ -1,5 +1,7 @@
-package Base;
+package PageObjects;
 
+import Base.BasePage;
+import PageObjects.MainPage;
 import org.openqa.selenium.By;
 
 public class LoginPage extends BasePage {
@@ -17,12 +19,12 @@ public class LoginPage extends BasePage {
         return isDysplayed(credentialsInputAfterLog);
     }
 
-    public WorklistsPage login(String password, String username) throws InterruptedException {
+    public MainPage login(String password, String username) throws InterruptedException {
         Thread.sleep(1500);
         findWebElement(emailInput).sendKeys(username);
         findWebElement(passwordInput).sendKeys(password);
         findWebElement(loginButton).click();
-        return new WorklistsPage();
+        return new MainPage();
     }
 
     public String checkErrorMessage(){

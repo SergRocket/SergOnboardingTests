@@ -1,6 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Smoke suite">
+<suite name="Smoke suite Api">
+    <parameter name="PROJECT" value="2"/>
     <test verbose="2" preserve-order="true" name="SergOnboardingTests">
+
         <classes>
             <class name="ApiTests">
                 <methods>

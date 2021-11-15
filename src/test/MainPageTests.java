@@ -1,6 +1,6 @@
 import Base.BaseTest;
-import Base.LoginPage;
-import Base.WorklistsPage;
+import PageObjects.LoginPage;
+import PageObjects.MainPage;
 import TestData.TestRailConfigAnnotation;
 import Utils.AppConfig;
 import org.testng.annotations.DataProvider;
@@ -10,56 +10,53 @@ import org.testng.asserts.SoftAssert;
 import java.lang.reflect.Method;
 
 public class MainPageTests extends BaseTest {
-    @TestRailConfigAnnotation(id="3")
-    @Test(testName = "User can login with valid credentials")
+    @TestRailConfigAnnotation(id="1")
+    @Test(testName = "LoginTest")
     public void validLogin() {
         SoftAssert softAssert = new SoftAssert();
-        WorklistsPage worklistsPage = new WorklistsPage();
+        MainPage mainPage = new MainPage();
         validLog();
-        softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
-        softAssert.assertTrue(worklistsPage.containsUrl(AppConfig.expectedUrlAfterLogin));
+        softAssert.assertTrue(mainPage.isCompanyLogoVisible());
+        softAssert.assertTrue(mainPage.containsUrl(AppConfig.expectedUrlAfterLogin));
         softAssert.assertAll();
     }
 
     @TestRailConfigAnnotation(id="4")
-    @Test(testName = "User can switch between pages after results are shown")
+    @Test(testName = "UserPaginationTest")
     public void paginationTest() {
         SoftAssert softAssert= new SoftAssert();
-        WorklistsPage worklistsPage = new  WorklistsPage();
+        MainPage mainPage = new MainPage();
         sendSearchQuery();
-        worklistsPage.scrollToPagination();
-        worklistsPage.paginationClick();
-        softAssert.assertTrue(worklistsPage.isPaginationDysplayed());
-        softAssert.assertEquals(worklistsPage.isPaginationCounterUpdated(),2);
+        mainPage.scrollToPagination();
+        mainPage.paginationClick();
+        softAssert.assertTrue(mainPage.isPaginationDysplayed());
+        softAssert.assertEquals(mainPage.isPaginationCounterUpdated(),2);
         softAssert.assertAll();
     }
 
-    @TestRailConfigAnnotation(id="21")
-    @Test(dataProvider ="Test_data",testName = "User can perform valid search query")
-    public void searchForValidDifferent(String lookingFor) throws InterruptedException {
+    @TestRailConfigAnnotation(id="5")
+    @Test(dataProvider ="Test_data",testName = "UsersearchValidTest")
+    public void searchForValidDifferent(String lookingFor) {
         SoftAssert softAssert = new SoftAssert();
-        WorklistsPage worklistsPage = new WorklistsPage();
-        softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
-        Thread.sleep(1500);
-        worklistsPage.scrollToSearch();
+        MainPage mainPage = new MainPage();
+        softAssert.assertTrue(mainPage.isCompanyLogoVisible());
+        mainPage.scrollToSearch();
         cleanSearchField();
-        worklistsPage.sendSearchQuery(lookingFor);
-        softAssert.assertTrue(worklistsPage.isResultsAreVisible());
+        mainPage.sendSearchQuery(lookingFor);
+        softAssert.assertTrue(mainPage.isResultsAreVisible());
         softAssert.assertAll();
     }
-    @TestRailConfigAnnotation(id="5")
-    @Test(dataProvider ="Test_data",testName = "User can perform invalid search")
-    public void searchForOInValidDifferent(String lookingFor) throws InterruptedException {
+    @TestRailConfigAnnotation(id="6")
+    @Test(dataProvider ="Test_data",testName = "UserInvalidSearchTest")
+    public void searchForOInValidDifferent(String lookingFor) {
         SoftAssert softAssert = new SoftAssert();
-        WorklistsPage worklistsPage = new WorklistsPage();
-        Thread.sleep(1900);
-        softAssert.assertTrue(worklistsPage.isCompanyLogoVisible());
-        Thread.sleep(1500);
+        MainPage mainPage = new MainPage();
+        softAssert.assertTrue(mainPage.isCompanyLogoVisible());
         cleanSearchField();
-        worklistsPage.sendSearchQuery(lookingFor);
-        softAssert.assertTrue(worklistsPage.isErrorAreVisible());
-        softAssert.assertEquals(worklistsPage.getErrorText(), "К сожалению, по запросу \"ZAZ\" ничего не найдено.\n" +
-                "Свяжитесь, пожалуйста, с нашими специалистами по  выше телефонам.");
+        mainPage.sendSearchQuery(lookingFor);
+        softAssert.assertTrue(mainPage.isErrorAreVisible());
+        softAssert.assertEquals(mainPage.getErrorText(), "К сожалению, по запросу \"ZAZ\" ничего не найдено.\n" +
+                "Свяжитесь, пожалуйста, с нашими специалистами по указанным выше телефонам.");
         softAssert.assertAll();
     }
 
@@ -74,40 +71,38 @@ public class MainPageTests extends BaseTest {
         return null;
     }
 
-    @TestRailConfigAnnotation(id="6")
-    @Test(testName = "User can select from any category")
+    @TestRailConfigAnnotation(id="3")
+    @Test(testName = "UserSelectTest")
     public void selectingRandomCategory() throws InterruptedException {
         LoginPage loginPage = new  LoginPage();
         SoftAssert softAssert = new SoftAssert();
-        WorklistsPage worklistsPage = new WorklistsPage();
+        MainPage mainPage = new MainPage();
         softAssert.assertTrue(loginPage.afterLoginPageisOpen());
-        worklistsPage.scrollToSearch();
+        mainPage.scrollToSearch();
         cleanSearchField();
-        worklistsPage.selectingCategory();
-        softAssert.assertTrue(worklistsPage.isCategoriesAreVisible());
+        mainPage.selectingCategory();
+        softAssert.assertTrue(mainPage.isCategoriesAreVisible());
         softAssert.assertAll();
     }
 
     @TestRailConfigAnnotation(id="2")
-    @Test(testName = "User can logout after he/she was logged in")
-    public void loginOut() throws InterruptedException {
-        WorklistsPage worklistsPage = new WorklistsPage();
+    @Test(testName = "LogoutTest")
+    public void loginOut() {
+        MainPage mainPage = new MainPage();
         SoftAssert softAssert = new SoftAssert();
-        Thread.sleep(2000);
-        worklistsPage.scrollToSearch();
+        mainPage.scrollToSearch();
         logOut();
-        Thread.sleep(1500);
-        softAssert.assertTrue(worklistsPage.isCarMakesAreVisible());
+        softAssert.assertTrue(mainPage.isCarMakesAreVisible());
         softAssert.assertAll();
     }
 
-    @TestRailConfigAnnotation(id="1")
-    @Test(testName = "User can`t login with invalid credentials")
+    @TestRailConfigAnnotation(id="7")
+    @Test(testName = "UserNegativeLogintest")
     public void negativeLogInTest() {
         SoftAssert softAssert = new SoftAssert();
-        WorklistsPage worklistsPage = new WorklistsPage();
+        MainPage mainPage = new MainPage();
         invalidLog();
-        softAssert.assertTrue(worklistsPage.isCarMakesAreVisible());
+        softAssert.assertTrue(mainPage.isCarMakesAreVisible());
         softAssert.assertAll();
     }
 }
