@@ -66,7 +66,7 @@ public class MainPage extends BasePage {
     }
 
     public boolean isResultsAreVisible(){
-        if(findElements(afterSearchResults).size() >0) {
+        if(isDysplayed(afterSearchResults)) {
             return true;
         } else
         return false;
@@ -111,5 +111,4 @@ public class MainPage extends BasePage {
         WebElement search = findWebElement(mainSearch);
         scrollWithJSToElement(search);
     }
-
 }
