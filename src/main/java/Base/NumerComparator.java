@@ -1,8 +1,7 @@
 package Base;
 
 import java.util.Comparator;
-import com.google.common.collect.ComparisonChain.*;
-import com.google.common.primitives.Chars;
+
 
 public class NumerComparator implements Comparator<String> {
 

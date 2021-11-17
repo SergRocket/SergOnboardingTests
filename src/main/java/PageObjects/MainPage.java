@@ -17,7 +17,7 @@ public class MainPage extends BasePage {
     public By logoutButton = new By.ByXPath("//a[text()='Выход']");
     public By navMenuBlocks = new By.ByCssSelector("div[class*='top-menu']>ul>li");
     public By carNames = new By.ByCssSelector("div[class*='model-name']");
-    public By catParts = new By.ByCssSelector("div[class*='row parts_cats']");
+    public By catParts = new By.ByCssSelector("div[class*='parts_cat']");
     public By noResultsError = new By.ByCssSelector("div[class*='alert-warning']>h4");
     public By paginationBlock = new By.ByCssSelector("ul[class*='pagination']");
     public By accountBlock = new By.ById("block-loggedin");
