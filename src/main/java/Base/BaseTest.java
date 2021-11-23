@@ -63,19 +63,19 @@ public class BaseTest {
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
         data = new HashMap();
-        data.put("include_all", true);
+       /* data.put("include_all", true);
         data.put("name", "Test Run " + System.currentTimeMillis());
         JSONObject jsonObject = null;
         jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
         Long suite_Id = (Long) jsonObject.get("id");
-        context.setAttribute("suiteId", suite_Id);
+        context.setAttribute("suiteId", suite_Id);*/
     }
 
 
 
     @BeforeClass
     public synchronized void beforeClass(ITestContext context){
-        suiteName = context.getCurrentXmlTest().getSuite().getName();
+       // suiteName = context.getCurrentXmlTest().getSuite().getName();
         ExtentTest extentTest = ExtentReportManager.getiInstanceOfExtentReports(suiteName)
          .createTest(getClass().getName());
         parentTest.set(extentTest);
@@ -83,7 +83,7 @@ public class BaseTest {
 
     @Parameters({"browser"})
     @BeforeTest
-    public void setBrowserAndEnv(@Optional("chrome")String browser) throws MalformedURLException {
+    public void setBrowserAndEnv(@Optional("opera")String browser) throws MalformedURLException {
         browserName = browser;
         //ChromeOptions options = new ChromeOptions();
         //driver = new RemoteWebDriver(new URL(AppConfig.HOST), options);
@@ -93,7 +93,7 @@ public class BaseTest {
 
     @Parameters({"browser"})
     @BeforeMethod
-    public void beforeMethodSetup(Method method,ITestContext context,@Optional("chrome")String browser){
+    public void beforeMethodSetup(Method method,ITestContext context,@Optional("opera")String browser){
         ExtentTest extentTest = parentTest.get().createNode(method.getName());
         test.set(extentTest);
         testName = method.getName();
@@ -106,7 +106,7 @@ public class BaseTest {
 
     @AfterMethod
     public void afterTest(ITestResult result, ITestContext context) throws IOException, APIExeption {
-        Map data = new HashMap();
+      /*  Map data = new HashMap();
         client = new APIClient(RAILS_ENGINE_URL);
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
@@ -118,13 +118,13 @@ public class BaseTest {
         }
         String caseId = (String) context.getAttribute("caseId");
         Long suiteId = (Long) context.getAttribute("suiteId");
-        client.sendPost("add_result_for_case/" + suiteId + "/" + caseId, data);
+        client.sendPost("add_result_for_case/" + suiteId + "/" + caseId, data);*/
     }
 
     @AfterSuite
     public void tearDownTestRailAndDriver(ITestContext context) throws IOException, APIExeption {
-        Long suiteId = (Long) context.getAttribute("suiteId");
-        client.sendPost("close_run/" + suiteId + "/", data);
+       /* Long suiteId = (Long) context.getAttribute("suiteId");
+        client.sendPost("close_run/" + suiteId + "/", data);*/
     }
 
     @AfterMethod
@@ -219,6 +219,8 @@ public class BaseTest {
             }
             return DRIVER_THREAD_LOCAL.get();
         }
+
+
 
 
     public void putResultsIntoTestRail(String testCaseId, ITestResult result){
