@@ -1,0 +1,1 @@
+{"uuid":"c9a9d6b9-2e6a-492f-adf0-49cdb06e5486","name":"LoginOutTest","children":["8d1c587f-8141-44d9-98fe-a966b6a0fd81"],"befores":[{"name":"beforeClass","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1636117596653,"stop":1636117596723}],"afters":[],"links":[],"start":1636117595380,"stop":1636117596885}

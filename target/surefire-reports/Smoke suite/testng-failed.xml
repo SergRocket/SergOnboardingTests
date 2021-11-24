@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Smoke suite]" guice-stage="DEVELOPMENT" verbose="0">
+  <parameter name="PROJECT" value="1"/>
+  <parameter name="browser" value="chrome"/>
+  <parameter name="testRailSuiteId" value="1"/>
+  <test thread-count="5" name="SergOnboardingTests(failed)" verbose="0">
+    <classes>
+      <class name="MainPageTests">
+        <methods>
+          <include name="beforeClass"/>
+          <include name="searchForOInValidDifferent" invocation-numbers="0">
+            <parameter name="testRailCaseId" value="5"/>
+          </include> <!-- searchForOInValidDifferent -->
+          <include name="tearDownTestRailAndDriver"/>
+          <include name="setBrowserAndEnv"/>
+          <include name="createTestRun"/>
+          <include name="killDriver"/>
+          <include name="loginOut">
+            <parameter name="testRailCaseId" value="2"/>
+          </include> <!-- loginOut -->
+          <include name="beforeMethodSetup"/>
+          <include name="negativeLogInTest">
+            <parameter name="testRailCaseId" value="1"/>
+          </include> <!-- negativeLogInTest -->
+          <include name="afterTest"/>
+          <include name="afterMethodSetup"/>
+        </methods>
+      </class> <!-- MainPageTests -->
+    </classes>
+  </test> <!-- SergOnboardingTests(failed) -->
+</suite> <!-- Failed suite [Smoke suite] -->
