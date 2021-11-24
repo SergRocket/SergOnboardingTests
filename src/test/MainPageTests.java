@@ -19,6 +19,7 @@ public class MainPageTests extends BaseTest {
         softAssert.assertTrue(mainPage.isCompanyLogoVisible());
         softAssert.assertTrue(mainPage.containsUrl(AppConfig.expectedUrlAfterLogin));
         softAssert.assertAll();
+        System.out.print("Hello");          
     }
 
     @TestRailConfigAnnotation(id="4")
