@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.opera.OperaDriver;
@@ -63,21 +64,21 @@ public class BaseTest {
         client.setUser(TESTRAIL_USERNAME);
         client.setPassword(TESTRAIL_PASSWORD);
         data = new HashMap();
-       /* data.put("include_all", true);
+        data.put("include_all", true);
         data.put("name", "Test Run " + System.currentTimeMillis());
         JSONObject jsonObject = null;
         jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
         Long suite_Id = (Long) jsonObject.get("id");
-        context.setAttribute("suiteId", suite_Id);*/
+        context.setAttribute("suiteId", suite_Id);
     }
 
 
 
     @BeforeClass
     public synchronized void beforeClass(ITestContext context){
-       // suiteName = context.getCurrentXmlTest().getSuite().getName();
-        ExtentTest extentTest = ExtentReportManager.getiInstanceOfExtentReports(suiteName)
-         .createTest(getClass().getName());
+       suiteName = context.getCurrentXmlTest().getSuite().getName();
+       ExtentTest extentTest = ExtentReportManager.getiInstanceOfExtentReports(suiteName)
+       .createTest(getClass().getName());
         parentTest.set(extentTest);
     }
 
@@ -140,14 +141,16 @@ public class BaseTest {
         Reporter.log("Start stopping tests");
     }
 
+    @Parameters({"browser"})
     @AfterTest
-    public void killDriver(){
+    public void killDriver(@Optional("chrome")String browser){
         if(driver !=null){
-            driver.close();
+            driver.close();}
+         else if(browser != "firefox"){
             driver.quit();
+        }
             DRIVER_THREAD_LOCAL.remove();
         }
-    }
 
 
     private static void setENV(String envnForTests){
@@ -158,39 +161,12 @@ public class BaseTest {
         return test;
     }
 
-    private static void setEnvironmentForTests(String environmentForTests) {
-        ENV = environmentForTests;
+    public static WebDriver getDriver() {
+        return DRIVER_THREAD_LOCAL.get();
     }
 
     public static String getENV(){return ENV;}
 
-    public void validLog(){
-        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.validUsername);
-        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.validPassword);
-        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
-    }
-
-    public void invalidLog(){
-        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.invalidUsername);
-        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.invalidPassword);
-        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
-    }
-
-    public void sendSearchQuery(){
-        driver.findElement(By.id("artnum")).sendKeys(AppConfig.searchQuery);
-        driver.findElement(By.cssSelector("button[onclick*='search_bubmit']")).click();
-    }
-
-    public void cleanSearchField(){
-        String searchField = driver.findElement(By.id("artnum")).getText();
-        if(searchField !=null){
-            driver.findElement(By.id("artnum")).clear();
-        }
-    }
-
-    public void logOut(){
-        driver.findElement(By.xpath("//a[text()='Выход']")).click();
-    }
 
     private String getNeededTestRunId(JSONArray allRuns){
         String isCompleted;
@@ -214,6 +190,11 @@ public class BaseTest {
                     WebDriverManager.operadriver().setup();
                     DRIVER_THREAD_LOCAL.set(new OperaDriver());
                     break;
+
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
+                    DRIVER_THREAD_LOCAL.set(new FirefoxDriver());
+
                 default:
                     System.out.print("Failed to setup browser");
             }
@@ -248,9 +229,9 @@ public class BaseTest {
     protected void takeScreenshots(String fileName, String methodName, String testName) {
         WebDriver augmentDriver = new Augmenter().augment(getWebDriver());
         File srcFile = ((TakesScreenshot) augmentDriver).getScreenshotAs(OutputType.FILE);
-        String path = System.getProperty("user.dir") + File.separator + "test-outpit" + File.separator + "screenshots" +
-                File.separator + getTodayDate() + File.separator + testSuiteName + File.separator + testName + File.separator
-                + methodName + File.separator + getSystemTime() + " " + fileName + " .png";
+        String path = System.getProperty("user.dir") + File.separator + "target" + File.separator + "screenshots" +
+                File.separator + getTodayDate() + File.separator + methodName + File.separator +
+                getSystemTime() + " " + fileName + " .png";
         try {
             FileUtils.copyFile(srcFile, new File(path));
         } catch (IOException e) {

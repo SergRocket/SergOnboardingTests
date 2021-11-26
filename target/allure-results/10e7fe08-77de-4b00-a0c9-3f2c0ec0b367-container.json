@@ -1,0 +1,1 @@
+{"uuid":"10e7fe08-77de-4b00-a0c9-3f2c0ec0b367","name":"SergOnboardingTests","children":["763d95f5-a3ec-4760-9b47-85cdc11edd63"],"befores":[{"name":"setBrowserAndEnv","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1637926550525,"stop":1637926553789}],"afters":[],"links":[],"start":1637926550523,"stop":1637926555074}

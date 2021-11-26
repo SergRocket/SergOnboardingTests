@@ -1,5 +1,6 @@
 package Base;
 
+import Utils.AppConfig;
 import Utils.Reporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -29,12 +30,17 @@ public BasePage() {
             .ignoring(NoSuchElementException.class);
 }
 
-    public WebElement findWebElement(By element){ return driver.findElement(element);}
+    public WebElement findWebElement(By element){
+    Reporter.log("Getting web element " + element);
+    return driver.findElement(element);}
 
-    public List<WebElement> findElements(By element){return driver.findElements(element);}
+    public List<WebElement> findElements(By element){
+    Reporter.log("Getting list of web elements " + element);
+    return driver.findElements(element);}
 
     public void clickElement(By element){
-        findWebElement(element).click();
+    Reporter.log("Clicking on the web element " + element);
+    findWebElement(element).click();
     }
 
 
@@ -55,6 +61,46 @@ public BasePage() {
        String givenValue = findWebElement(element).getAttribute(attribute);
        Reporter.log("The " + attribute + " from " + element + " is " + givenValue);
        return givenValue;
+    }
+
+    public void validLog(){
+        Reporter.log("Sending valid userName to the input field ");
+        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.validUsername);
+        Reporter.log("Sending valid password to the input field ");
+        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.validPassword);
+        Reporter.log("Clicking the login button ");
+        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
+    }
+
+    public void invalidLog(){
+        Reporter.log("Sending invalid userName to the input field ");
+        driver.findElement(By.id("auth-username")).sendKeys(AppConfig.invalidUsername);
+        Reporter.log("Sending invalid password to the input field ");
+        driver.findElement(By.id("auth-password")).sendKeys(AppConfig.invalidPassword);
+        Reporter.log("Clicking the login button ");
+        driver.findElement(By.cssSelector("button[class*='btn-success authTop']")).click();
+    }
+
+    public void sendSearchQuery(){
+        Reporter.log("Sending search query to the input field ");
+        driver.findElement(By.id("artnum")).sendKeys(AppConfig.searchQuery);
+        Reporter.log("Clicking the search button ");
+        driver.findElement(By.cssSelector("button[onclick*='search_bubmit']")).click();
+    }
+
+    public void cleanSearchField(){
+        Reporter.log("Checking if feild has text in it ");
+        String searchField = driver.findElement(By.id("artnum")).getText();
+        if(searchField !=null){
+            Reporter.log("Text is found and will be removed ");
+            driver.findElement(By.id("artnum")).clear();
+        }
+        Reporter.log("The search filed is cleared ");
+    }
+
+    public void logOut(){
+        Reporter.log("Clicking the loginOut button ");
+        driver.findElement(By.xpath("//a[text()='Выход']")).click();
     }
 
     public void refreshPage(){
@@ -89,7 +135,8 @@ public BasePage() {
     }
 
     public String getUrl(){
-      return driver.getCurrentUrl();
+    Reporter.log("Getting current url ");
+    return driver.getCurrentUrl();
     }
 
     public String getChangedUrl(String regex, String replacement){
@@ -109,6 +156,7 @@ public BasePage() {
     }
 
     public boolean isDysplayed(By element){
+    Reporter.log("Checking if element is shown ");
         if (findElements(element).size() >0) {
             return true;
         } else
@@ -116,6 +164,7 @@ public BasePage() {
     }
 
     public boolean containsUrl (String str){
+        Reporter.log("Checking that url contains " + str);
         boolean currentUrl = driver.getCurrentUrl().contains(str);
         return currentUrl;
     }
@@ -127,7 +176,8 @@ public BasePage() {
     }
 
     public void waitForElementToBeVisible(By element){
-      webDriverWait.until(ExpectedConditions.visibilityOf(findWebElement(element)));
+     Reporter.log("Waiting for visibility of the element");
+     webDriverWait.until(ExpectedConditions.visibilityOf(findWebElement(element)));
     }
 
     public void clickelementWithJS(By element){
@@ -135,6 +185,5 @@ public BasePage() {
     JavascriptExecutor executor =(JavascriptExecutor)driver;
     executor.executeScript("arguments[0].click();", element);
     }
-
 
 }

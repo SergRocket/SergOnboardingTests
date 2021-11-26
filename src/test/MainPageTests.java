@@ -15,7 +15,7 @@ public class MainPageTests extends BaseTest {
     public void validLogin() {
         SoftAssert softAssert = new SoftAssert();
         MainPage mainPage = new MainPage();
-        validLog();
+        mainPage.validLog();
         softAssert.assertTrue(mainPage.isCompanyLogoVisible());
         softAssert.assertTrue(mainPage.containsUrl(AppConfig.expectedUrlAfterLogin));
         softAssert.assertAll();
@@ -27,7 +27,7 @@ public class MainPageTests extends BaseTest {
     public void paginationTest() {
         SoftAssert softAssert= new SoftAssert();
         MainPage mainPage = new MainPage();
-        sendSearchQuery();
+        mainPage.sendSearchQuery();
         mainPage.scrollToPagination();
         mainPage.paginationClick();
         softAssert.assertTrue(mainPage.isPaginationDysplayed());
@@ -42,7 +42,7 @@ public class MainPageTests extends BaseTest {
         MainPage mainPage = new MainPage();
         softAssert.assertTrue(mainPage.isCompanyLogoVisible());
         mainPage.scrollToSearch();
-        cleanSearchField();
+        mainPage.cleanSearchField();
         mainPage.sendSearchQuery(lookingFor);
         softAssert.assertTrue(mainPage.isResultsAreVisible());
         softAssert.assertAll();
@@ -53,7 +53,7 @@ public class MainPageTests extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         MainPage mainPage = new MainPage();
         softAssert.assertTrue(mainPage.isCompanyLogoVisible());
-        cleanSearchField();
+        mainPage.cleanSearchField();
         mainPage.sendSearchQuery(lookingFor);
         softAssert.assertTrue(mainPage.isErrorAreVisible());
         softAssert.assertEquals(mainPage.getErrorText(), "К сожалению, по запросу \"ZAZ\" ничего не найдено.\n" +
@@ -80,7 +80,7 @@ public class MainPageTests extends BaseTest {
         MainPage mainPage = new MainPage();
         softAssert.assertTrue(loginPage.afterLoginPageisOpen());
         mainPage.scrollToSearch();
-        cleanSearchField();
+        mainPage.cleanSearchField();
         mainPage.selectingCategory();
         softAssert.assertTrue(mainPage.isCategoriesAreVisible());
         softAssert.assertAll();
@@ -92,7 +92,7 @@ public class MainPageTests extends BaseTest {
         MainPage mainPage = new MainPage();
         SoftAssert softAssert = new SoftAssert();
         mainPage.scrollToSearch();
-        logOut();
+        mainPage.logOut();
         softAssert.assertTrue(mainPage.isCarMakesAreVisible());
         softAssert.assertAll();
     }
@@ -102,7 +102,7 @@ public class MainPageTests extends BaseTest {
     public void negativeLogInTest() {
         SoftAssert softAssert = new SoftAssert();
         MainPage mainPage = new MainPage();
-        invalidLog();
+        mainPage.invalidLog();
         softAssert.assertTrue(mainPage.isCarMakesAreVisible());
         softAssert.assertAll();
     }

@@ -1,12 +1,16 @@
 package PageObjects;
 
 import Base.BasePage;
+import Base.BaseTest;
+import Utils.AppConfig;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.Random;
 
 public class MainPage extends BasePage {
+
     public By brandImage = new By.ByCssSelector("img[src*='media/logo']");
     public By afterSearchResults = new By.ByCssSelector("img[src*='/templates/ukrparts/assets/media/n']");
     public By mainSearch = new By.ById("artnum");
@@ -22,12 +26,15 @@ public class MainPage extends BasePage {
     public By paginationBlock = new By.ByCssSelector("ul[class*='pagination']");
     public By accountBlock = new By.ById("block-loggedin");
 
+
+
     public boolean isCompanyLogoVisible() {
         if (isDysplayed(brandImage)) {
             return true;
         } else
             return false;
     }
+
 
 
 
