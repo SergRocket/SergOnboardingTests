@@ -8,34 +8,34 @@ import Utils.APIExeption;
 import Utils.AppConfig;
 import Utils.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.Augmenter;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.*;
+import org.testng.annotations.Optional;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static oracle.security.pki.util.SignatureAlgorithms.e;
 
 @Listeners({BaseListener.class})
 public class BaseTest {
@@ -67,9 +67,9 @@ public class BaseTest {
         data.put("include_all", true);
         data.put("name", "Test Run " + System.currentTimeMillis());
         JSONObject jsonObject = null;
-        jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
-        Long suite_Id = (Long) jsonObject.get("id");
-        context.setAttribute("suiteId", suite_Id);
+        //jsonObject = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
+        //Long suite_Id = (Long) jsonObject.get("id");
+        //context.setAttribute("suiteId", suite_Id);
     }
 
 
@@ -129,9 +129,20 @@ public class BaseTest {
     }
 
     @AfterMethod
-    public void afterMethodSetup(ITestResult results){
-        if(results.getStatus() == ITestResult.FAILURE){
+    public void afterMethodSetup(ITestResult results) throws IOException {
+
+        if(results.getStatus() == ITestResult.FAILURE) {
             test.get().fail(results.getThrowable());
+            String exeptionMsg = Arrays.toString(results.getThrowable().getStackTrace());
+            test.get().fail("<details><summry><b><font color = red>Exeption Occured, click to see details: "
+                    + "</font></b></summary>" + exeptionMsg.replaceAll(",", "<br>") + "</details> \n");
+            String paths2 = takeScreenshots("Failure ScreenShot", results.getMethod().getMethodName());
+            test.get().fail("<b><font color=red>" + "Screenshot of failure" + "</font></b>",
+                    MediaEntityBuilder.createScreenCaptureFromPath(paths2).build());
+            /*File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(srcFile,new File("1.png"));*/
+            //test.get().addScreenCaptureFromPath(paths2);
+            //test.get().addScreenCaptureFromPath("1.png");
             Utils.Reporter.logFail("Test has Failed");
         } else if (results.getStatus() == ITestResult.SKIP)
             test.get().skip(results.getThrowable());
@@ -226,18 +237,27 @@ public class BaseTest {
         }
     }
 
-    protected void takeScreenshots(String fileName, String methodName, String testName) {
+    protected String takeScreenshots(String fileName, String methodName) {
         WebDriver augmentDriver = new Augmenter().augment(getWebDriver());
         File srcFile = ((TakesScreenshot) augmentDriver).getScreenshotAs(OutputType.FILE);
         String path = System.getProperty("user.dir") + File.separator + "target" + File.separator + "screenshots" +
                 File.separator + getTodayDate() + File.separator + methodName + File.separator +
-                getSystemTime() + " " + fileName + " .png";
+                getSystemTime() + " " + fileName + ".png";
+        String paths = "target" + File.separator + "screenshots" +
+                File.separator + getTodayDate() + File.separator + methodName + File.separator +
+                getSystemTime() + " " + fileName + ".png";
+
         try {
             FileUtils.copyFile(srcFile, new File(path));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return paths;
     }
+
+
+
     private static String getTodayDate(){
         return (new SimpleDateFormat("yyyyMMdd").format(new Date()));
     }
