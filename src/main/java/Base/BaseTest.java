@@ -139,10 +139,6 @@ public class BaseTest {
             String paths2 = takeScreenshots("Failure ScreenShot", results.getMethod().getMethodName());
             test.get().fail("<b><font color=red>" + "Screenshot of failure" + "</font></b>",
                     MediaEntityBuilder.createScreenCaptureFromPath(paths2).build());
-            /*File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(srcFile,new File("1.png"));*/
-            //test.get().addScreenCaptureFromPath(paths2);
-            //test.get().addScreenCaptureFromPath("1.png");
             Utils.Reporter.logFail("Test has Failed");
         } else if (results.getStatus() == ITestResult.SKIP)
             test.get().skip(results.getThrowable());
@@ -252,11 +248,8 @@ public class BaseTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return paths;
     }
-
-
 
     private static String getTodayDate(){
         return (new SimpleDateFormat("yyyyMMdd").format(new Date()));

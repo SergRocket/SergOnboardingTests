@@ -73,7 +73,7 @@ public class MainPageTests extends BaseTest {
     }
 
     @TestRailConfigAnnotation(id="3")
-    @Test(testName = "UserSelectTest")
+    @Test(testName = "UserSelectTest", retryAnalyzer = Base.RetryAnalyzer.class)
     public void selectingRandomCategory() throws InterruptedException {
         LoginPage loginPage = new  LoginPage();
         SoftAssert softAssert = new SoftAssert();

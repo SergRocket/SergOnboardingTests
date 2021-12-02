@@ -30,11 +30,7 @@ public class BaseListener implements IInvokedMethodListener, ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        BaseTest baseTest = new BaseTest();
         Reporter.logFail("Test has failed");
-        String methodName = result.getMethod().getMethodName();
-        String testName = result.getMethod().getXmlTest().getName();
-       // baseTest.takeScreenshots("ScreenshotOnFailure", methodName, testName);
         Reporter.logFail(getJSConsoleError());
     }
 
